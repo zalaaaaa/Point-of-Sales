@@ -21,8 +21,10 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+// BASIC ROUTE 
 Route::get('/', [HomeController::class, 'index']);
 
+// PREFIX ROUTE
 Route::prefix('category')->group(function () {
     Route::get('/food-beverage', [ProductsController::class, 'foodBeverage']);
     Route::get('/beauty-health', [ProductsController::class, 'beautyHealth']);
@@ -30,6 +32,8 @@ Route::prefix('category')->group(function () {
     Route::get('/baby-kid', [ProductsController::class, 'babyKid']);
 });
 
+// ROUTES PARAMS
 Route::get('/user/{id}/name/{name}', [UserController::class, 'index']);
 
+// BASIC ROUTE
 Route::get('/penjualan', [PenjualanController::class, 'index']);
