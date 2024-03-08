@@ -8,12 +8,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
     public function index()
     {
-        // get all user
-        $user = UserModel::all();
+        // get all user with level
+        $user = UserModel::with('level')->get();
         return view('user', ['data' => $user]);
     }
+
+    // public function index()
+    // {
+    //     // get all user
+    //     $user = UserModel::all();
+    //     return view('user', ['data' => $user]);
+    // }
 
     public function tambah()
     {
