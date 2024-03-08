@@ -38,8 +38,13 @@ class UserController extends Controller
         // $user = UserModel::findOrFail(1);
         // return view('user', ['data' => $user]);
 
-        // mencari menggunakan findOrFail (tidak ditemukan)
-        $user = UserModel::where('username', 'manager9')->firstOrFail();
+        // // mencari menggunakan findOrFail (tidak ditemukan)
+        // $user = UserModel::where('username', 'manager9')->firstOrFail();
+        // return view('user', ['data' => $user]);
+
+        // Retreiving Aggregrates
+        $user = UserModel::where('level_id', 2)->count();
+        // dd($user);
         return view('user', ['data' => $user]);
     }
 }
