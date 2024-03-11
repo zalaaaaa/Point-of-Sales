@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
@@ -37,3 +39,8 @@ Route::get('/user/{id}/name/{name}', [UserController::class, 'index']);
 
 // BASIC ROUTE
 Route::get('/penjualan', [PenjualanController::class, 'index']);
+
+Route::get('/level', [LevelController::class, 'index']);
+Route::get('/kategori', [KategoriController::class, 'index']);
+
+Route::get('/user', [UserController::class, 'index']);
