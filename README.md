@@ -853,7 +853,7 @@
     ```
 
 10. hasil <br>
-![alt text](/images/p3/image-20.png)
+    ![alt text](/images/p3/image-20.png)
 
 <hr>
 
@@ -882,3 +882,278 @@
 11. penulisan kode protected $table = ‘m_user’; bertujuan untuk memberi tahu model bahwa model ini terkait dengan tabel database yang bernama m_user. Sedangkan protected $primaryKey = ‘user_id’; digunakan untuk memberi tahu model bahwa kolom utamanya adalah user_id.
 
 12. Dalam melakukan operasi CRUD ke database, Eloquent ORM umumnya lebih mudah digunakan daripada DB Facade atau Query Builder karena memungkinkan Anda untuk berinteraksi dengan database menggunakan model dan relasi antar model. Eloquent ORM menyediakan sintaks yang lebih dekat dengan bahasa pemrograman, seperti menambahkan atau mengambil data dari database menggunakan model yang sudah ditentukan, tanpa perlu menulis query SQL manual. Namun, pilihan tergantung pada preferensi dan kebutuhan spesifik proyek.
+
+# Laporan Praktikum Web Lanjut Pertemuan 4
+
+### Praktikum 1
+
+1. konfigurasi file UserModel
+
+    ```php
+        <?php
+
+        namespace App\Models;
+
+        use Illuminate\Database\Eloquent\Factories\HasFactory;
+        use Illuminate\Database\Eloquent\Model;
+
+        class UserModel extends Model
+        {
+            use HasFactory;
+
+            protected $table = 'm_users';
+            protected $primaryKey = 'user_id';
+
+            protected $fillable = ['level_id', 'username', 'nama', 'password'];
+        }
+
+    ```
+
+2. konfigurasi UserCOntroller
+
+    ```php
+    <?php
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+
+            $data = [
+                'level_id' => 2,
+                'username' => 'manager_dua',
+                'nama' => 'Manager 2',
+                'password' => Hash::make('12345'),
+            ];
+
+            UserModel::create($data);
+
+            $user = UserModel::all();
+            return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+3. hasil <br>
+   ![alt text](image.png)
+
+4. konfigurasi file UserModel
+
+    ```php
+        <?php
+
+        namespace App\Models;
+
+        use Illuminate\Database\Eloquent\Factories\HasFactory;
+        use Illuminate\Database\Eloquent\Model;
+
+        class UserModel extends Model
+        {
+            use HasFactory;
+
+            protected $table = 'm_users';
+            protected $primaryKey = 'user_id';
+
+            protected $fillable = ['level_id', 'username', 'nama'];
+        }
+
+    ```
+
+5. konfigurasi UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+
+            $data = [
+                'level_id' => 2,
+                'username' => 'manager_tiga',
+                'nama' => 'Manager 3',
+                'password' => Hash::make('12345'),
+            ];
+
+            UserModel::create($data);
+
+            $user = UserModel::all();
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+6. hasil <br>
+   ![alt text](image-1.png)<br>
+   terjadi error karena password harus diisi
+
+### Praktikum 2
+
+1. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+
+            $user = UserModel::find(1);
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+2. edit view
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Level Pengguna</title>
+    </head>
+
+    <body>
+        <h1>Data Level Pengguna</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Kode Level</th>
+                <th>Nama Level</th>
+                <th>ID Level Pengguna</th>
+            </tr>
+            @foreach ($data as $d)
+            <tr>
+                <td>{{$d->user_id}}</td>
+                <td>{{$d->username}}</td>
+                <td>{{$d->nama}}</td>
+                <td>{{$d->level_id}}</td>
+            </tr>
+            @endforeach
+        </table>
+    </body>
+
+    </html>
+    ```
+
+3. hasil
+   ![alt text](image-2.png)
+4. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::where('level_id', 1)->first();
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+5. hasil <br>
+   ![alt text](image-3.png)
+6. konfigurasi file UserController
+
+    ```php
+        <?php
+
+        namespace App\Http\Controllers;
+
+        use App\Models\UserModel;
+        use Illuminate\Http\Request;
+        use Illuminate\Support\Facades\Hash;
+
+        class UserController extends Controller
+        {
+            public function index()
+            {
+                $user = UserModel::where('level_id', 1);
+                return view('user', ['data' => $user]);
+            }
+        }
+    ```
+
+7. hasil <br>
+   ![alt text](image-4.png)
+
+8.konfigurasi file UserController
+```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::findOr(1, ['username', 'nama'], function () {
+                abort(404);
+            });
+            return view('user', ['data' => $user]);
+        }
+    }
+
+```
+9. hasil <br>
+![alt text](image-5.png)
+
+10. konfigurasi UserController
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::findOr(20, ['username', 'nama'], function () {
+                abort(404);
+            });
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+11. hasil <br>
+![alt text](image-6.png)
+
