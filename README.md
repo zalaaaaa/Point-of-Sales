@@ -941,7 +941,7 @@
     ```
 
 3. hasil <br>
-   ![alt text](image.png)
+   ![alt text](/images/p4/image.png)
 
 4. konfigurasi file UserModel
 
@@ -997,10 +997,10 @@
     ```
 
 6. hasil <br>
-   ![alt text](image-1.png)<br>
+   ![alt text](/images/p4/image-1.png)<br>
    terjadi error karena password harus diisi
 
-### Praktikum 2
+### Praktikum 2.1
 
 1. konfigurasi file UserController
 
@@ -1060,7 +1060,7 @@
     ```
 
 3. hasil
-   ![alt text](image-2.png)
+   ![alt text](/images/p4/image-2.png)
 4. konfigurasi file UserController
 
     ```php
@@ -1083,7 +1083,7 @@
     ```
 
 5. hasil <br>
-   ![alt text](image-3.png)
+   ![alt text](/images/p4/image-3.png)
 6. konfigurasi file UserController
 
     ```php
@@ -1106,9 +1106,10 @@
     ```
 
 7. hasil <br>
-   ![alt text](image-4.png)
+   ![alt text](/images/p4/image-4.png)
 
 8.konfigurasi file UserController
+
 ```php
     <?php
 
@@ -1130,10 +1131,12 @@
     }
 
 ```
+
 9. hasil <br>
-![alt text](image-5.png)
+   ![alt text](/images/p4/image-5.png)
 
 10. konfigurasi UserController
+
     ```php
     <?php
 
@@ -1154,6 +1157,629 @@
         }
     }
     ```
-11. hasil <br>
-![alt text](image-6.png)
 
+11. hasil <br>
+    ![alt text](/images/p4/image-6.png)
+
+### Praktikum 2.2
+
+1. konfigurasi UserController
+
+    ```php
+        <?php
+
+        namespace App\Http\Controllers;
+
+        use App\Models\UserModel;
+        use Illuminate\Http\Request;
+        use Illuminate\Support\Facades\Hash;
+
+        class UserController extends Controller
+        {
+            public function index()
+            {
+                $user = UserModel::findOrFail(1);
+                return view('user', ['data' => $user]);
+            }
+        }
+
+    ```
+
+2. hasil <br>
+   ![alt text](/images/p4/image-7.png) <br>
+   mencari data berdasarkan primary key
+
+3. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::where('username', 'manager9')->firstOrFail();
+            return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+4. hasil <br>
+   ![alt text](/images/p4/image-8.png)
+   data tidak ditemukan
+
+### Praktikum 2.3
+
+1. konfigiurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::where('level_id', 2)->count();
+            dd($user);
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+2. hasil <br>
+   ![alt text](/images/p4/image-9.png)
+   menghitung julah baris
+
+3. buat view
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Level Pengguna</title>
+    </head>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+
+    <body>
+        <h1>Data User</h1>
+        <table>
+            <thead>
+                <th>Jumlah Pengguna</th>
+            </thead>
+            <tbody>
+                <td>{{$data}}</td>
+            </tbody>
+        </table>
+    </body>
+
+    </html>
+    ```
+
+4. hasil <br>
+   ![alt text](/images/p4/image-10.png)
+
+### Praktikum 2.4
+
+1. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrCreate(
+                [
+                    'username' => 'manager',
+                    'nama' => 'Manager'
+                ]
+            );
+            return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+2. ubah kembali user.blade.php ke sebelumnya
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Level Pengguna</title>
+    </head>
+
+    <body>
+        <h1>Data Level Pengguna</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Kode Level</th>
+                <th>Nama Level</th>
+                <th>ID Level Pengguna</th>
+            </tr>
+            <td>{{$data->user_id}}</td>
+            <td>{{$data->username}}</td>
+            <td>{{$data->nama}}</td>
+            <td>{{$data->level_id}}</td>
+            </tr>
+        </table>
+    </body>
+
+    </html>
+    ```
+
+3. hasil <br>
+   ![alt text](/images/p4/image-11.png) <br>
+   mthod akan mencoba mencari record database menggunakan pasangan kolom/nilai yang diberikan. Jika model tidak dapat ditemukan dalam database, sebuah record akan disisipkan dengan atribut yang dihasilkan dari penggabungan argumen baris pertama dengan argumen baris kedua yang bersifat opsional.
+4. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrCreate(
+                [
+                'username' => 'manager',
+                'nama' => 'Manager',
+                'password' => Hash::make('12345'),
+                'level_id' => 2
+            ]
+            );
+            return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+5. hasil <br>
+   ![alt text](/images/p4/image-12.png) <br>
+   tidak terjadi apa-apa karena pada UserModel pada $fillabel tidak diinsertkan password
+
+6. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+       public function index()
+       {
+           $user = UserModel::firstOrCreate(
+               [
+               'username' => 'manager',
+               'nama' => 'Manager',
+           ]
+           );
+           return view('user', ['data' => $user]);
+       }
+    }
+
+    ```
+
+7. hasil <br>
+   ![alt text](/images/p4/image-13.png) <br>
+   method akan mencoba menemukan/mengambil record/data dalam database yang cocok dengan atribut yang diberikan. Namun, jika data tidak ditemukan, data akan disiapkan untuk di-insert-kan ke database dan model baru akan dikembalikan
+
+8. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrCreate(
+                [
+                'username' => 'manager33',
+                'nama' => 'Manager Tiga Tiga',
+                'password' => Hash::make('12345'),
+                'level_id' => 2
+            ]
+            );
+            return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+9. hasil <br>
+   ![alt text](/images/p4/image-14.png) <br>
+   ![alt text](/images/p4/image-15.png) <br>
+   data tidak masuk ke DB <br>
+10. konfigurasi file UserControler
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrCreate(
+                [
+                'username' => 'manager33',
+                'nama' => 'Manager Tiga Tiga',
+                'password' => Hash::make('12345'),
+                'level_id' => 2
+            ]
+            );
+            return view('user', ['data' => $user]);
+        }
+    }
+
+
+    ```
+
+11. hasil <br>
+    ![alt text](/images/p4/image-16.png) <br>
+    ![alt text](/images/p4/image-17.png) <br>
+    data masuk ke DB
+
+### Praktikum 2.5
+
+1. Konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrNew(
+                [
+                    'username' => 'manager55',
+                    'nama' => 'Manager55',
+                    'password' => Hash::make('12345'),
+                    'level_id' => 2
+                ]
+            );
+
+            $user->username = 'manager56';
+
+            $user->isDirty();
+            $user->isDirty('username');
+            $user->isDirty('nama');
+            $user->isDirty(['nama', 'username']);
+
+            $user->isClean();
+            $user->isClean('username');
+            $user->isClean('nama');
+            $user->isClean(['nama', 'username']);
+
+            $user->save();
+
+            $user->isDirty();
+            $user->isClean();
+            dd($user->isDirty());
+            // return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+2. hasil <br>
+   ![alt text](/images/p4/image-18.png)<br>
+   Metode isDirty menentukan apakah ada atribut model yang telah diubah sejak model diambil. Anda dapat meneruskan nama atribut tertentu atau serangkaian atribut ke metode isDirty untuk menentukan apakah ada atribut yang "kotor". Metode ini isClean akan menentukan apakah suatu atribut tetap tidak berubah sejak model diambil.
+
+3. konfigurasi file UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::firstOrNew(
+                [
+                    'username' => 'manager55',
+                    'nama' => 'Manager55',
+                    'password' => Hash::make('12345'),
+                    'level_id' => 2
+                ]
+            );
+
+            $user->username = 'manager12';
+
+            $user->save();
+
+            $user->wasChanged();
+            $user->wasChanged('username');
+            $user->wasChanged(['nama', 'username']);
+            $user->wasChanged('nama');
+
+            dd($user->wasChanged(['nama', 'username']));
+            // return view('user', ['data' => $user]);
+        }
+    }
+
+    ```
+
+4. hasil <br>
+   ![alt text](/images/p4/image-19.png)<br>
+   method ini menentukan apakah ada atribut yang diubah saat model terakhir disimpan dalam siklus permintaan saat ini. Jika diperlukan, Anda dapat memberikan nama atribut untuk melihat apakah atribut tertentu telah diubah
+
+### Praktikum 2.6
+
+1. konfigurasi User.blade.php
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Level Pengguna</title>
+    </head>
+
+    <body>
+        <h1>Data User</h1>
+        <a href="user/tambah">+ Tambah User</a>
+        <table border="1" cellpadding="2" cellspacing="0">
+            <tr>
+                <td>ID</td>
+                <td>Username</td>
+                <td>Nama</td>
+                <td>ID Level Pengguna</td>
+                <td>Aksi</td>
+            </tr>
+            @foreach ($data as $d)
+            <tr>
+                <td>{{$d->user_id}}</td>
+                <td>{{$d->username}}</td>
+                <td>{{$d->nama}}</td>
+                <td>{{$d->level_id}}</td>
+                <td>
+                    <a href="/user/ubah/{{$d->user_id}}">Ubah</a> |
+                    <a href="/user/hapus/{{$d->user_id}}">Hapus</a>
+                </td>
+            </tr>
+            @endforeach
+        </table>
+    </body>
+
+    </html>
+    ```
+
+2. konfigurasi UserController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\UserModel;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Hash;
+
+    class UserController extends Controller
+    {
+        public function index()
+        {
+            $user = UserModel::all();
+            return view('user', ['data' => $user]);
+        }
+    }
+    ```
+
+3. hasil <br>
+   ![alt text](/images/p4/image-20.png)<br>
+   membuat tampilan crud sederhana
+
+4. membuat view user_tambah
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tambah Data</title>
+    </head>
+
+    <body>
+        <h1>Form Tambah Data User</h1>
+        <form action="/user/tambah_simpan" method="post">
+
+            {{csrf_field()}}
+
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Masukan Username">
+            <br>
+
+            <label>Nama</label>
+            <input type="text" name="nama" placeholder="Masukan Nama">
+            <br>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Masukan Password">
+            <br>
+
+            <label>Level ID</label>
+            <input type="number" name="level_id" placeholder="Masukan ID Level">
+            <br>
+
+            <input type="submit" value="Simpan" class="btn btn-success">
+
+        </form>
+    </body>
+
+    </html>
+    ```
+
+5. setting routes <br>
+   ![alt text](/images/p4/image-21.png)<br>
+
+6. menambahkan method tambah UserController <br>
+   ![alt text](/images/p4/image-22.png) <br>
+
+7. hasil <br>
+   ![alt text](/images/p4/image-23.png) <br>
+   membuat form untuk menambahkan user <br>
+
+8. membuat route untuk tambah_simpan <br>
+   ![alt text](/images/p4/image-24.png) <br>
+
+9. konfigurasi file UserController <br>
+   ![alt text](/images/p4/image-25.png) <br>
+
+10. hasil <br>
+    ![alt text](/images/p4/image-26.png) <br>
+    ![alt text](/images/p4/image-27.png) <br>
+    berhasil menambahkan user baru
+
+11. membuat form ubah_data <br>
+
+    ```HTML
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tambah Data</title>
+    </head>
+
+    <body>
+        <h1>Form Ubah Data User</h1>
+        <a href="../">Kembali</a>
+        <form action="ubah_simpan/{{$data->user_id}}" method="post">
+
+            {{csrf_field()}}
+            {{method_field()}}
+
+            <label>Username</label>
+            <input value="{{$data->username}}" type="text" name="username" placeholder="Masukan Username">
+            <br>
+
+            <label>Nama</label>
+            <input value="{{$data->nama}}" type="text" name="nama" placeholder="Masukan Nama">
+            <br>
+
+            <label>Password</label>
+            <input value="{{$data->password}}" type="password" name="password" placeholder="Masukan Password">
+            <br>
+
+            <label>Level ID</label>
+            <input value="{{$data->level_id}}" type="number" name="level_id" placeholder="Masukan ID Level">
+            <br>
+
+            <input type="submit" value="Ubah" class="btn btn-success">
+
+        </form>
+    </body>
+
+    </html>
+    ```
+
+12. membuat routes untuk ubah<br>
+    ![alt text](/images/p4/image-28.png) <br>
+
+13. menambhakan function ubah pada UserController <br>
+    ![alt text](/images/p4/image-29.png)
+
+14. hasil <br>
+    ![alt text](/images/p4/image-30.png)
+15. membuat routes untuk ubah_simpan <br>
+    ![alt text](/images/p4/image-31.png) <br>
+16. menambahkan method ubah_simpan pada UserController <br>
+    ![alt text](/images/p4/image-32.png)<br>
+
+17. hasil <br>
+    ![alt text](/images/p4/image-33.png)<br>
+    ![alt text](/images/p4/image-34.png)<br>
+    ![alt text](/images/p4/image-35.png)<br>
+    data berhasil dirubah<br>
+18. membuat routes untuk hapus <br>
+    ![alt text](/images/p4/image-37.png) <br>
+19. membuat method hapus pada UserController <br>
+    ![alt text](/images/p4/image-36.png) <br>
+20. hasil<br>
+    ![alt text](/images/p4/image-38.png)<br>
+
+### Praktikum 2.7
+
+1. konfigurasi pada file UserModel <br>
+   ![alt text](/images/p4/image-39.png) <br>
+2. konfigurasi file UserController <br>
+   ![alt text](/images/p4/image-40.png) <br>
+3. hasil <br>
+   ![alt text](/images/p4/image-41.png)<br>
