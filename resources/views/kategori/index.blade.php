@@ -13,6 +13,10 @@
         <div class="card-body">
             {{ $dataTable->table() }}
         </div>
+
+        <div class="card-footer">
+            <a href="/kategori/create" class="btn btn-primary">Tambah Kategori</a>
+        </div>
     </div>
    </div>
 @endsection
