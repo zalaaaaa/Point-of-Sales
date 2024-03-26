@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,6 +20,16 @@ class LevelController extends Controller
         // return 'Delete data berhasil. Jumlah data yang dihapus: ' . $row . ' baris';
 
         $data = DB::select('select * from m_level');
-        return view('level', ['data' => $data]);
+        return view('level.create', ['data' => $data]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validator = $request->validate([
+            'level_kode' => 'required',
+            'level_nama' => 'required',
+        ]);
+
+        return redirect('/level');
     }
 }

@@ -21,16 +21,7 @@
             @endif
         </h1>
     @endif
-@stop
-
-@section('content_top_nav_right')
-    {{-- Menu for manage kategori --}}
-    <li class="nav-item">
-        <a href="/kategori" class="nav-link">
-            <h6>Manage Kategori</h6>
-        </a>
-    </li>
-@stop   
+@stop 
 
 {{-- Rename section content to content_body --}}
 @section('content')
