@@ -615,7 +615,7 @@
 8. membuat view
 
     ```html
-    <!DOCTYPE html>
+    <!doctype html>
     <html lang="en">
         <head>
             <meta charset="UTF-8" />
@@ -1783,3 +1783,280 @@
    ![alt text](/images/p4/image-40.png) <br>
 3. hasil <br>
    ![alt text](/images/p4/image-41.png)<br>
+
+# Laporan Praktikum Web Lanjut Pertemuan 5
+
+### Praktikum 1
+
+1. require Admin-LTE <br>
+   ![alt text](/images/p5/image.png) <br>
+2. install admin-LTE <br>
+   ![alt text](/images/p5/image-1.png) <br>
+3. membuat file pada "resources/views/layout/app.blade.php" <br>
+   ![alt text](/images/p5/image-2.png) <br>
+   ![alt text](/images/p5/image-3.png) <br>
+4. edit isi file welcome.blade.php <br>
+   ![alt text](/images/p5/image-4.png) <br>
+5. hasil <br>
+   ![alt text](/images/p5/image-5.png) <br>
+
+### Praktikum 2
+
+1. install laravel data tables <br>
+   ![alt text](/images/p5/image-6.png) <br>
+   ![alt text](/images/p5/image-7.png) <br>
+2. Install Laravel DataTables Vite dan sass <br>
+   ![alt text](/images/p5/image-8.png)<br>
+   ![alt text](/images/p5/image-9.png) <br>
+3. Edit file resources/js/app.js <br>
+   ![alt text](/images/p5/image-10.png)<br>
+4. Buat file resources/saas/app.scss <br>
+   ![alt text](/images/p5/image-11.png) <br>
+5. menjalankan perintah npm ru dev <br>
+   ![alt text](/images/p5/image-12.png)<br>
+6. menjalankan perintah
+    ```
+    php artisan datatables:make Kategori
+    ```
+7. konfigurasi KategoriDataTable
+
+    ```php
+    <?php
+
+    namespace App\DataTables;
+
+    use App\Models\KategoriModel;
+    use App\Models\m_kategori;
+    use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+    use Yajra\DataTables\EloquentDataTable;
+    use Yajra\DataTables\Html\Builder as HtmlBuilder;
+    use Yajra\DataTables\Html\Button;
+    use Yajra\DataTables\Html\Column;
+    use Yajra\DataTables\Html\Editor\Editor;
+    use Yajra\DataTables\Html\Editor\Fields;
+    use Yajra\DataTables\Services\DataTable;
+
+    class KategoriDataTable extends DataTable
+    {
+        /**
+         * Build the DataTable class.
+         *
+         * @param QueryBuilder $query Results from query() method.
+         */
+        public function dataTable(QueryBuilder $query): EloquentDataTable
+        {
+            return (new EloquentDataTable($query))
+                /* ->addColumn('action', 'kategori.action') */
+                ->setRowId('id');
+        }
+        /**
+         * Get the query source of dataTable.
+         */
+        public function query(m_kategori $model): QueryBuilder
+        {
+            return $model->newQuery();
+        }
+        /**
+         * Optional method if you want to use the html builder.
+         */
+        public function html(): HtmlBuilder
+        {
+            return $this->builder()
+                ->setTableId('kategori-table')
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                //->dom('Bfrtip')
+                ->orderBy(1)
+                ->selectStyleSingle()
+                ->buttons([
+                    Button::make('excel'),
+                    Button::make('csv'),
+                    Button::make('pdf'),
+                    Button::make('print'),
+                    Button::make('reset'),
+                    Button::make('reload')
+                ]);
+        }
+        /**
+         * Get the dataTable columns definition.
+         */
+        public function getColumns(): array
+        {
+            return [
+                /* Column::computed('action')
+    ->exportable(false)
+    ->printable(false)
+    ->width(60)
+    ->addClass('text-center'), */
+                Column::make('kategori_id'),
+                Column::make('kategori_kode'),
+                Column::make('kategori_nama'),
+                Column::make('created_at'),
+                Column::make('updated_at'),
+            ];
+        }
+        /**
+         * Get the filename for export.
+         */
+        protected function filename(): string
+        {
+            return 'Kategori_' . date('YmdHis');
+        }
+    }
+    ```
+
+8. ubah m_kategori pada model
+
+    ```php
+    <?php
+
+    namespace App\Models;
+
+    use Illuminate\Database\Eloquent\Factories\HasFactory;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Database\Eloquent\Relations\HasMany;
+
+    class m_kategori extends Model
+    {
+        // use HasFactory;
+        protected $table = 'm_kategori';
+        protected $primaryKey = 'kategori_id';
+        protected $filllable = ['kategori_kode', 'kategori_name'];
+
+        public function barang(): HasMany{
+            return $this->hasMany(m_barang::class, 'barang_id', 'barang_id');
+        }
+    }
+    ```
+
+9. konfiguasi KategoriController
+
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\DB;
+    use App\DataTables\KategoriDataTable;
+
+    class KategoriController extends Controller
+    {
+        public function index(KategoriDataTable $dataTable)
+        {
+            // $data = [
+            //     'kategori_kode' => 'SNK',
+            //     'kategori_nama' => 'Snack/Makanan Ringan',
+            //     'created_at' => now()
+            // ];
+
+            // DB::table('m_kategoris')->insert($data);
+            // return 'insert data baru berhasil';
+
+            return $dataTable->render('kategori.index');
+        }
+    }
+
+    ```
+
+10. membuat folder kategori pada resources
+
+    ```php
+    @extends('layout.app')
+
+    {{-- Customize layout section --}}
+
+    @section('subtitle', 'Welcome')
+    @section('content_header_title', 'Home')
+    @section('content_header_subtitle', 'Kategori')
+
+    {{-- Customize body:main page content --}}
+
+    @section('content')
+        <div class="container">
+            <div class="card">
+                <div class="card-header">Manage Kategori</div>
+                <div class="card-body">
+                    {{$dataTable->table()}}
+                </div>
+            </div>
+        </div>
+    @endsection
+
+    @push('script')
+        {{$dataTable->script()}}
+    @endpush
+    ```
+
+11. membuat route <br>
+    ![alt text](/images/p5/image-13.png)<br>
+
+12. konfigurasi app pada folder layout<br>
+    ![alt text](/images/p5/image-14.png)<br>
+    ![alt text](/images/p5/image-15.png)<br>
+13. Menset ViteJs / script type defaults
+
+    ```php
+    <?php
+
+    namespace App\Providers;
+
+    use Illuminate\Support\ServiceProvider;
+    use Yajra\DataTables\Html\Builder;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Register any application services.
+         */
+        public function register(): void
+        {
+            //
+        }
+
+        /**
+         * Bootstrap any application services.
+         */
+        public function boot(): void
+        {
+            Builder::useVite();
+        }
+    }
+
+    ```
+
+14. mengisikan beebrapa daa ke table kategori
+15. hasil <br>
+    ![alt text](/images/p5/image-16.png)<br>
+
+### Praktikum 3
+
+1. konfigurasi route<br>
+   ![alt text](/images/p5/image-17.png)<br>
+2. menambahkan 2 function pada KategoriController<br>
+   ![alt text](/images/p5/image-18.png)<br>
+3. buat file create.blade.php pada folder views/kategori <br>
+   ![alt text](/images/p5/image-19.png) <br>
+4. konfigurasi csrfToken <br>
+   ![alt text](/images/p5/image-20.png)<br>
+5. hasil <br>
+   ![alt text](/images/p5/image-21.png) <br>
+   ![alt text](/images/p5/image-22.png) <br>
+   ![alt text](/images/p5/image-23.png) <br>
+
+### Tugas
+
+1. menambahkan button add pada halaman manage kategori <br>
+   ![alt text](/images/p5/image-24.png)<br>
+   ![alt text](/images/p5/image-25.png)<br>
+   ![alt text](/images/p5/image-26.png)<br>
+2. menambahkan menu untuk halaman manage kategori, di daftar menu navbar <br>
+   ![alt text](/images/p5/image-27.png)<br>
+   ![alt text](/images/p5/image-28.png)<br>
+3. menambahkan action data tables <br>
+   ![alt text](/images/p5/image-29.png) <br>
+   ![alt text](/images/p5/image-30.png) <br>
+   ![alt text](/images/p5/image-31.png) <br>
+4. membuat action delete <br>
+   ![alt text](/images/p5/image-29.png) <br>  
+   ![alt text](/images/p5/image-32.png) <br>
