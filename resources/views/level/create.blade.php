@@ -1,52 +1,46 @@
-@extends('adminlte::page')
-
-@section('title', 'Dashboard')
-
-@section('content_header')
-    <h1>Dashboard</h1>
-@stop
+@extends('layouts.template')
 
 @section('content')
-    <div class="card card-warning">
-        <div class="card-header">
-            <h3 class="card-title">Form Level</h3>
-        </div>
-        <div class="card-body">
-            <form action="../level" method="post">
-                @csrf
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label>Kode</label>
-                            <input type="text" name="level_kode" id="level_kode" class="form-control" placeholder="Kode ...">
-                        </div>
-                        <div class="form-group">
-                            <label>Nama</label>
-                            <input type="text" name="level_nama" id="level_nama" class="form-control" placeholder="Nama ...">
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+<div class="card card-outline card-primary">
+    <div class="card-header">
+        <h3 class="card-title">{{ $page->title }}</h3>
+        <div class="card-tools"></div>
     </div>
-@stop
+    <div class="card-body">
+        <form method="POST" action="{{ url('level') }}" class="form-horizontal">
+            @csrf
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Level Kode</label>
+                <div class="col-11">
+                    <input type="text" class="form-control" id="level_kode" name="level_kode" value="{{ old('level_kode') }}" required>
+                    @error('level_kode')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Level Nama</label>
+                <div class="col-11">
+                    <input type="text" class="form-control" id="level_nama" name="level_nama" value="{{ old('level_nama') }}" required>
+                    @error('level_nama')
+                        <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label"></label>
+                <div class="col-11">
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                    <a class="btn btn-sm btn-default ml-1" href="{{ url('level') }}">Kembali</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
 
-@section('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-@stop
+@push('css')
+@endpush
 
-@section('js')
-    <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
-@stop
+@push('js')
+@endpush
