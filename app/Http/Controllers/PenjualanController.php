@@ -86,25 +86,35 @@ class PenjualanController extends Controller
             'jumlah' => 'required|array',
         ]);
 
-        $penjualan = PenjualanModel::create([
-            'user_id' => $request->user_id,
-            'pembeli' => $request->pembeli,
-            'penjualan_kode' => $request->penjualan_kode,
-            'penjualan_tanggal' => $request->penjualan_tanggal
-        ]);
-
         foreach ($request->barang_id as $key => $barangId) {
-            PenjualanDetailModel::create([
-                'penjualan_id' => $penjualan->penjualan_id,
-                'barang_id' => $barangId,
-                'harga' => $request->total_harga[$key],
-                'jumlah' => $request->jumlah[$key]
-            ]);
+            // Ambil jumlah stok barang dari database
+            $stokBarang = StokModel::where('barang_id', $barangId)->first();
 
-            // Mengurangi stok barang yang terjual
-            $barang = StokModel::find($barangId);
-            $barang->stok_jumlah -= $request->jumlah[$key];
-            $barang->save();
+            // Periksa apakah stok mencukupi
+            if ($stokBarang && $request->jumlah[$key] <= $stokBarang->stok_jumlah) {
+                // Stok mencukupi, lanjutkan menyimpan transaksi penjualan
+                $penjualan = PenjualanModel::create([
+                    'user_id' => $request->user_id,
+                    'pembeli' => $request->pembeli,
+                    'penjualan_kode' => $request->penjualan_kode,
+                    'penjualan_tanggal' => $request->penjualan_tanggal
+                ]);
+
+                // Tambahkan detail penjualan
+                PenjualanDetailModel::create([
+                    'penjualan_id' => $penjualan->penjualan_id,
+                    'barang_id' => $barangId,
+                    'harga' => $request->total_harga[$key],
+                    'jumlah' => $request->jumlah[$key]
+                ]);
+
+                // Kurangi stok barang yang terjual
+                $stokBarang->stok_jumlah -= $request->jumlah[$key];
+                $stokBarang->save();
+            } else {
+                // Stok tidak mencukupi, beri pesan kesalahan kepada pengguna
+                return redirect('/penjualan')->with('error', 'Stok barang tidak mencukupi');
+            }
         }
 
         return redirect('/penjualan')->with('success', 'Data Penjualan berhasil disimpan');
@@ -177,6 +187,14 @@ class PenjualanController extends Controller
             'penjualan_tanggal' => $request->penjualan_tanggal
         ]);
 
+        $oldPenjualanDetail = PenjualanDetailModel::where('penjualan_id', $penjualan->penjualan_id)->get();
+        foreach ($oldPenjualanDetail as $item) {
+            // Menambahkan stok barang yang gak jadi dibeli
+            $brg = StokModel::where('barang_id', $item->barang_id)->first();
+            $brg->stok_jumlah += $item->jumlah;
+            $brg->save();
+        }
+
         PenjualanDetailModel::where('penjualan_id', $id)->delete();
 
         // Menambahkan kembali detail penjualan yang baru
@@ -188,6 +206,11 @@ class PenjualanController extends Controller
                 'jumlah' => $request->jumlah[$index],
                 'harga' => $request->total_harga[$index],
             ]);
+
+            // Mengurangi stok barang yang terjual
+            $barang = StokModel::find($barang_id);
+            $barang->stok_jumlah -= $request->jumlah[$index];
+            $barang->save();
         }
 
         return redirect('/penjualan')->with('success', 'Data penjualan berhasil diubah');
