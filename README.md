@@ -1,4 +1,11 @@
-#### Nama: Ihza Nurkhafidh Al-baihaqi <br >Kelas: TI 2H <br> NIM: 2241720165
+### Nama: Ihza Nurkhafidh Al-baihaqi <br >Kelas: TI 2H <br> NIM: 2241720165
+
+-   [Praktikum 2](#laporan-praktikum-web-lanjut-pertemuan-2) <br>
+-   [Praktikum 3](#laporan-praktikum-web-lanjut-pertemuan-3) <br>
+-   [Praktikum 4](#laporan-praktikum-web-lanjut-pertemuan-4) <br>
+-   [Praktikum 5](#laporan-praktikum-web-lanjut-pertemuan-5) <br>
+
+<hr>
 
 # Laporan Praktikum Web Lanjut Pertemuan 2
 
@@ -2060,3 +2067,94 @@
 4. membuat action delete <br>
    ![alt text](/images/p5/image-29.png) <br>  
    ![alt text](/images/p5/image-32.png) <br>
+
+# Laporan Praktikum Web Lanjut Pertemuan 6
+
+### Template Form
+
+1. download source code <br>
+   ![alt text](/images/p6/image.png) <br>
+2. memindahkan file template pada folder public <br>
+   ![alt text](/images/p6/image-1.png)<br>
+3. edit bagian yang telah ditentukan<br>
+   ![alt text](/images/p6/image-4.png) <br>
+4. konfigurasi kode yang telah ditentukan <br>
+   ![alt text](/images/p6/image-3.png) <br>
+5. hasil <br>
+   ![alt text](/images/p6/image-4.png)<br>
+6. menggunakan general form <br>
+   ![alt text](/images/p6/image-5.png) <br>
+7. apa yang tampil? <br>
+   yang tampil adalah general form yang disalin tadi <br>
+8. advanced elements<br>
+   ![alt text](/images/p6/image-6.png) <br>
+   ![alt text](/images/p6/image-7.png) <br>
+9. editor <br>
+   ![alt text](/images/p6/image-8.png) <br>
+10. validation <br>
+    ![alt text](/images/p6/image-9.png) <br>
+    membuat form untuk tabel m_user<br>
+    ![alt text](/images/p6/image-10.png)<br>
+    ![alt text](/images/p6/image-11.png)<br>
+    membuat form untuk tabel level<br>
+    ![alt text](/images/p6/image-12.png)<br>
+    ![alt text](/images/p6/image-13.png)<br>
+
+### Validasi Pada Server
+
+1. mendefinisikan route <br>
+   ![alt text](/images/p6/image-14.png)<br>
+2. edit fungsi <br>
+   ![alt text](/images/p6/image-15.png)<br>
+3. perbedaan validate dan validateWithBag <br>
+   validate() dan validateWithBag() adalah dua metode validasi yang disediakan oleh Laravel untuk memeriksa data yang diterima melalui permintaan HTTP. Perbedaan utamanya terletak pada cara pengembalian hasil validasi. Metode validate() secara otomatis mengembalikan pengguna ke halaman sebelumnya dengan pesan kesalahan validasi jika validasi gagal, sedangkan validateWithBag() memungkinkan Anda untuk menentukan di mana pesan kesalahan validasi disimpan, yang berguna jika Anda ingin menangani tampilan pesan kesalahan secara manual atau melakukan validasi secara asinkron.
+4. Menggunakan bail untuk menghentikan validasi pada field setelah kegagalan validasi pertama, Sehingga, jika validasi untuk kode_kategori gagal, maka Laravel akan menghentikan validasi dan tidak mengevaluasi aturan validasi untuk nama_kategori. <br>
+![alt text](/images/p6/image-16.png)<br>
+5. Pada view/create.blade.php tambahkan code berikut agar ketika validasi gagal, kita dapat menampilkan pesan kesalahan dalam tampilan:<br>
+![alt text](/images/p6/image-17.png)<br>
+6. hasil <br>
+![alt text](/images/p6/image-18.png)<br>
+7. Pada view/create.blade.php tambahkan dan coba running code berikut <br>
+![alt text](/images/p6/image-19.png)<br>
+![alt text](/images/p6/image-20.png)<br>
+
+### Form Request Validation
+1. Membuat permintaan form dengan menuliskan pada terminal<br>
+![alt text](/images/p6/image-21.png)<br>
+2. Ketik kode berikut pada Http/request/StorePostRequest <br>
+![alt text](/images/p6/image-22.png)<br>
+![alt text](/images/p6/image-23.png)<br>
+3. Terapkan validasi juga pada tabel m_user dan m_level.
+
+
+### CRUD 
+1. Buat POSController lengkap dengan resourcenya, Membuat Resource Controller dan Route yang berfungsi untuk route CRUD sehingga tidak perlu repot-repot membuat masing-masing route seperti post, get, delete dan update.
+![alt text](/images/p6/image-24.png)<br>
+2. Tambahkan kode pada route/web.php <br>
+![alt text](/images/p6/image-25.png)<br>
+3. Atur pada Models <br>
+![alt text](/images/p6/image-26.png)<br>
+4. atur pada migratiokn <br>
+![alt text](/images/p6/image-27.png)<br>
+5. Buka app/Http/Controllers/POSController.php kemudian ketikkan, kodenya seperti berikut ini<br>
+![alt text](/images/p6/image-28.png)<br>
+6. Buatlah folder di Resources/Views/m_user dengan beberapa blade dan isian kode berikut <br>
+![alt text](/images/p6/image-29.png)<br>
+![alt text](/images/p6/image-30.png)<br>
+![alt text](/images/p6/image-31.png)<br>
+![alt text](/images/p6/image-32.png)<br>
+![alt text](/images/p6/image-33.png)<br>
+7. silahkan akses localhost/m_user<br>
+![alt text](/images/p6/image-34.png)<br>
+
+### Tugas
+1. menampilkan level_id:<br>
+![alt text](/images/p6/image-34.png)<br>
+2. modifikasi tema kesukaan:
+![alt text](/images/p6/image-35.png)<br>
+3. Apa fungsi $request->validate, $error dan alert yang ada pada halaman CRUD tersebut? <br>
+$request->validate adalah sebuah metode yang digunakan untuk memvalidasi input yang diterima dari pengguna. Validasi dilakukan berdasarkan aturan yang telah didefinisikan di dalam metode rules() pada file Form Request atau secara langsung di dalam controller. Jika validasi gagal, maka metode ini akan mengembalikan pesan kesalahan.
+<br>$errors adalah sebuah variabel yang digunakan untuk menyimpan pesan-pesan kesalahan yang dihasilkan dari validasi input. Jika validasi gagal, pesan kesalahan akan disimpan di dalam variabel ini. Variabel ini dapat diakses di dalam tampilan Blade untuk menampilkan pesan kesalahan kepada pengguna.
+<br>alert adalah sebuah elemen HTML yang digunakan untuk menampilkan pesan kesalahan kepada pengguna. Dalam konteks halaman CRUD, pesan kesalahan biasanya ditampilkan dalam elemen alert untuk memberi tahu pengguna tentang kesalahan yang terjadi selama proses validasi atau operasi CRUD.
+<br>Dengan menggunakan fungsi $request->validate untuk validasi input dan variabel $errors untuk menangani pesan kesalahan, serta menggunakan elemen alert di dalam tampilan Blade, kita dapat dengan efektif mengelola validasi input dan memberikan umpan balik kepada pengguna.
+

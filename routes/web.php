@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\POSController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -63,3 +64,23 @@ Route::prefix('/kategori')->group(function () {
 	Route::put('/update_simpan/{id}', [KategoriController::class, 'update_simpan'])->name('/kategori/update_simpan');
 	Route::get('/hapus/{id}', [KategoriController::class, 'hapus'])->name('/kategori/hapus');
 });
+
+Route::prefix('/user')->group(function(){
+	Route::get('/', [UserController::class, 'index'])->name('/user');
+	Route::get('/create', [UserController::class, 'create'])->name('/user/create');
+	Route::post('/', [UserController::class, 'store']);
+	Route::get('/update/{id}', [UserController::class, 'update'])->name('/user/update');
+	Route::put('/update_simpan/{id}', [UserController::class, 'update_simpan'])->name('/user/update_simpan');
+	Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('/user/hapus');
+});
+
+Route::prefix('/level')->group(function(){
+	Route::get('/', [LevelController::class, 'index'])->name('/level');
+	Route::get('/create', [LevelController::class, 'create'])->name('/level/create');
+	Route::post('/', [LevelController::class, 'store']);
+	Route::get('/update/{id}', [LevelController::class, 'update'])->name('/level/update');
+	Route::put('/update_simpan/{id}', [LevelController::class, 'update_simpan'])->name('/level/update_simpan');
+	Route::get('/hapus/{id}', [LevelController::class, 'hapus'])->name('/level/hapus');
+});
+
+Route::resource('m_user', POSController::class);
