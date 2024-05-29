@@ -128,6 +128,14 @@ class PenjualanController extends Controller
             'harga_jual' => $barang->harga_jual, // Kembalikan harga jual barang dalam respons JSON
         ]);
     }
+    public function getImage($id)
+    {
+        $barang = BarangModel::findOrFail($id);
+
+        return response()->json([
+            'image' => $barang->image,
+        ]);
+    }
 
     public function show(string $id)
     {

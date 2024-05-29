@@ -11,6 +11,29 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
+
+    public function indexApi(){
+        return UserModel::all();
+    }
+    public function storeApi(Request $request){
+        $user = UserModel::create($request->all());
+        return response()->json($user, 201);
+    }
+    public function showApi(UserModel $user){
+        return UserModel::find($user);
+    }
+    public function updateApi(Request $request, UserModel $user){
+        $user->update($request->all());
+        return UserModel::find($user);
+    }
+    public function destroyApi(UserModel $user){
+        $user->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Terhapus'
+        ], 204);
+    }
+
     // Menampilkan halaman awal user
     public function index()
     {

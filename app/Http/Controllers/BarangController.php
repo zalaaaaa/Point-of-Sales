@@ -5,10 +5,84 @@ namespace App\Http\Controllers;
 use App\Models\BarangModel;
 use App\Models\KategoriModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class BarangController extends Controller
 {
+
+
+    public function indexApi(){
+        return BarangModel::all();
+    }
+    public function storeApi(Request $request){
+        $validator = Validator::make($request->all(), [
+            'kategori_id' => 'required',
+            'barang_kode' => 'required',
+            'barang_nama' => 'required',
+            'harga_beli' => 'required',
+            'harga_jual' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Handle the image upload
+        if ($request->hasFile('image')) {
+            if ($request->file('image')->isValid()) {
+                // Store the image in the 'public' disk (or any configured disk)
+                $imagePath = $request->image->store('images', 'public');
+
+                // create barang
+                $barang = BarangModel::create([
+                    'kategori_id' => $request->kategori_id,
+                    'barang_kode' => $request->barang_kode,
+                    'barang_nama' => $request->barang_nama,
+                    'harga_beli' => $request->harga_beli,
+                    'harga_jual' => $request->harga_jual,
+                    'image' => $imagePath // Store the path of the image instead of hash name
+                ]);
+
+                // return response JSON if barang is created
+                if ($barang) {
+                    return response()->json([
+                        'success' => true,
+                        'barang' => $barang
+                    ], 201);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid image upload'
+                ], 400);
+            }
+        }
+
+        // return JSON process insert failed
+        return response()->json([
+            'success' => false,
+            'message' => 'Image is required'
+        ], 409);
+    }
+    public function showApi(BarangModel $barang){
+        return BarangModel::find($barang);
+    }
+    public function updateApi(Request $request, BarangModel $barang){
+        $barang->update($request->all());
+        return BarangModel::find($barang);
+    }
+    public function destroyApi(BarangModel $barang){
+        $barang->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Terhapus'
+        ], 204);
+    }
+
+
     public function index()
     {
         $breadcrumb = (object) [
@@ -89,7 +163,7 @@ class BarangController extends Controller
 
     public function show(string $id)
     {
-        $barang = BarangModel::with('kategori')->find($id);
+        $barang = BarangModel::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Barang',

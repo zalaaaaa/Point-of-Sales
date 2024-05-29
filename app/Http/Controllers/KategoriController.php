@@ -12,6 +12,29 @@ use Yajra\DataTables\Facades\DataTables;
 
 class KategoriController extends Controller
 {
+
+    public function indexApi(){
+        return KategoriModel::all();
+    }
+    public function storeApi(Request $request){
+        $kategori = KategoriModel::create($request->all());
+        return response()->json($kategori, 201);
+    }
+    public function showApi(KategoriModel $kategori){
+        return KategoriModel::find($kategori);
+    }
+    public function updateApi(Request $request, KategoriModel $kategori){
+        $kategori->update($request->all());
+        return KategoriModel::find($kategori);
+    }
+    public function destroyApi(KategoriModel $kategori){
+        $kategori->delete();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Terhapus'
+        ], 204);
+    }
+
     public function index()
     {
         $breadcrumb = (object) [

@@ -91,6 +91,7 @@ Route::group(['prefix' => 'penjualan'], function () {
     Route::post('/list', [PenjualanController::class, 'list']);
     Route::get('/create', [PenjualanController::class, 'create']);
     Route::get('/get-harga/{id}', [PenjualanController::class, 'getHarga']);
+    Route::get('/get-image/{id}', [PenjualanController::class, 'getImage']);
     Route::post('/', [PenjualanController::class, 'store']);
     Route::get('/{id}', [PenjualanController::class, 'show']);
     Route::get('/{id}/edit', [PenjualanController::class, 'edit']);

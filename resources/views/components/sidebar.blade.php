@@ -1,7 +1,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">Raffy Store</a>
+            <a href="index.html">Ihza Store</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">RJO</a>
